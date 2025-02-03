@@ -8,10 +8,8 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // Convert command line argument to an integer
     int N = std::atoi(argv[1]);
 
-    // Print integers from 0 to N (inclusive) using printf
     for (int i = 0; i <= N; ++i) {
         printf("%d", i);
         if (i != N) {
@@ -20,7 +18,6 @@ int main(int argc, char* argv[]) {
     }
     printf("\n");
 
-    // Print integers from N to 0 (inclusive) using std::cout
     for (int i = N; i >= 0; --i) {
         std::cout << i;
         if (i != 0) {
