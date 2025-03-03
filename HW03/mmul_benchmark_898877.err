@@ -1,0 +1,25 @@
+
+----------------------------------------------------------------------------
+  gcc:
+----------------------------------------------------------------------------
+     Versions:
+        gcc/8.5.0
+        gcc/9.4.0
+        gcc/11.3.0
+        gcc/12.2.0
+        gcc/13.2.0
+
+----------------------------------------------------------------------------
+  For detailed information about a specific "gcc" package (including how to load the modules) use the module's full name.
+  Note that names that have a trailing (E) are extensions provided by other modules.
+  For example:
+
+     $ module spider gcc/13.2.0
+----------------------------------------------------------------------------
+
+ 
+
+Lmod has detected the following error: Unable to find: "gnuplot".
+
+
+

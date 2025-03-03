@@ -1,0 +1,42 @@
+Parallel Merge Sort Benchmark Summary
+====================================
+
+Threshold Benchmark (n=1,000,000, t=8):
+- Optimal threshold value: 1024
+- Execution times for different thresholds:
+  ts=2.0: 1283.21 ms
+  ts=4.0: 659.86 ms
+  ts=8.0: 319.78 ms
+  ts=16.0: 187.04 ms
+  ts=32.0: 76.39 ms
+  ts=64.0: 42.40 ms
+  ts=128.0: 29.51 ms
+  ts=256.0: 27.76 ms
+  ts=512.0: 26.90 ms
+  ts=1024.0: 25.95 ms
+
+Thread Count Benchmark (n=1,000,000, ts=1024):
+- Optimal thread count: 19
+- Speedup at optimal thread count: 5.42x
+- Parallel efficiency: 28.53%
+- Execution times for different thread counts:
+  t=1.0: 86.53 ms (speedup: 1.00x)
+  t=2.0: 50.50 ms (speedup: 1.71x)
+  t=3.0: 50.25 ms (speedup: 1.72x)
+  t=4.0: 38.34 ms (speedup: 2.26x)
+  t=5.0: 39.30 ms (speedup: 2.20x)
+  t=6.0: 28.27 ms (speedup: 3.06x)
+  t=7.0: 28.83 ms (speedup: 3.00x)
+  t=8.0: 26.96 ms (speedup: 3.21x)
+  t=9.0: 26.79 ms (speedup: 3.23x)
+  t=10.0: 23.72 ms (speedup: 3.65x)
+  t=11.0: 22.29 ms (speedup: 3.88x)
+  t=12.0: 20.05 ms (speedup: 4.32x)
+  t=13.0: 19.08 ms (speedup: 4.54x)
+  t=14.0: 18.68 ms (speedup: 4.63x)
+  t=15.0: 18.15 ms (speedup: 4.77x)
+  t=16.0: 17.55 ms (speedup: 4.93x)
+  t=17.0: 16.98 ms (speedup: 5.10x)
+  t=18.0: 16.19 ms (speedup: 5.34x)
+  t=19.0: 15.97 ms (speedup: 5.42x)
+  t=20.0: 17.04 ms (speedup: 5.08x)

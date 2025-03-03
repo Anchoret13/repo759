@@ -1,0 +1,73 @@
+Checking for available modules...
+Loading available gcc module: gcc/8.5.0
+WARNING: gnuplot is not available. Will create the script but may not be able to generate the plot.
+Running with 1 threads...
+Thread count 1 completed: 244.951 ms
+Running with 2 threads...
+Thread count 2 completed: 140.653 ms
+Running with 3 threads...
+Thread count 3 completed: 92.6026 ms
+Running with 4 threads...
+Thread count 4 completed: 71.4626 ms
+Running with 5 threads...
+Thread count 5 completed: 57.6417 ms
+Running with 6 threads...
+Thread count 6 completed: 48.5514 ms
+Running with 7 threads...
+Thread count 7 completed: 41.8138 ms
+Running with 8 threads...
+Thread count 8 completed: 36.7892 ms
+Running with 9 threads...
+Thread count 9 completed: 32.9166 ms
+Running with 10 threads...
+Thread count 10 completed: 30.1487 ms
+Running with 11 threads...
+Thread count 11 completed: 46.8036 ms
+Running with 12 threads...
+Thread count 12 completed: 43.7672 ms
+Running with 13 threads...
+Thread count 13 completed: 40.6689 ms
+Running with 14 threads...
+Thread count 14 completed: 38.3162 ms
+Running with 15 threads...
+Thread count 15 completed: 35.7478 ms
+Running with 16 threads...
+Thread count 16 completed: 34.6712 ms
+Running with 17 threads...
+Thread count 17 completed: 32.0837 ms
+Running with 18 threads...
+Thread count 18 completed: 30.1171 ms
+Running with 19 threads...
+Thread count 19 completed: 29.4291 ms
+Running with 20 threads...
+Thread count 20 completed: 28.108 ms
+Benchmark completed. Results saved to results/benchmark_data.csv
+Saving benchmark data in plotting-friendly format...
+Single-thread time:  ms
+Plot data saved to results/plot_data.txt
+To generate the plot, you can use any plotting tool with this data file
+Gnuplot not available. Please generate the plot manually using results/plot_data.txt
+
+Simple ASCII representation of the data:
+Threads | Time (ms)
+--------|----------
+      1 |    244.95
+      2 |    140.65
+      3 |     92.60
+      4 |     71.46
+      5 |     57.64
+      6 |     48.55
+      7 |     41.81
+      8 |     36.79
+      9 |     32.92
+     10 |     30.15
+     11 |     46.80
+     12 |     43.77
+     13 |     40.67
+     14 |     38.32
+     15 |     35.75
+     16 |     34.67
+     17 |     32.08
+     18 |     30.12
+     19 |     29.43
+     20 |     28.11
