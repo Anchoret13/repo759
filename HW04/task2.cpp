@@ -18,9 +18,29 @@ const double board_size = 4.0; // Size of the board
 
 // Function to calculate acceleration due to gravity
 void getAcc(const double pos[][3], const double mass[], double acc[][3], int N) {
+    // Initialize acceleration array to zeros
+    for (int i = 0; i < N; i++) {
+        acc[i][0] = 0.0;
+        acc[i][1] = 0.0;
+        acc[i][2] = 0.0;
+    }
 
-    // TODO:
-
+    // Calculate pairwise gravitational forces
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            if (i != j) {
+                double dx = pos[j][0] - pos[i][0];
+                double dy = pos[j][1] - pos[i][1];
+                double dz = pos[j][2] - pos[i][2];
+                
+                double inv_r3 = pow(dx*dx + dy*dy + dz*dz + softening*softening, -1.5);
+                
+                acc[i][0] += G * (dx * inv_r3) * mass[j];
+                acc[i][1] += G * (dy * inv_r3) * mass[j];
+                acc[i][2] += G * (dz * inv_r3) * mass[j];
+            }
+        }
+    }
 }
 
 // For debug: save positions to a CSV file
@@ -127,24 +147,43 @@ int main(int argc, char *argv[]) {
     // Main simulation loop
     for (int step = 0; step < Nt; step++) {
         
-        // TODO: (1/2) kick
+        // (1/2) kick
+        for (int i = 0; i < N; i++) {
+            vel[i][0] += acc[i][0] * dt / 2.0;
+            vel[i][1] += acc[i][1] * dt / 2.0;
+            vel[i][2] += acc[i][2] * dt / 2.0;
+        }
 
+        // Drift
+        for (int i = 0; i < N; i++) {
+            pos[i][0] += vel[i][0] * dt;
+            pos[i][1] += vel[i][1] * dt;
+            pos[i][2] += vel[i][2] * dt;
+        }
 
-        // TODO: Drift
-      
-
-        // TODO: Ensure particles stay within the board limits
+        // Ensure particles stay within the board limits
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (pos[i][j] > board_size) pos[i][j] = board_size;
+                if (pos[i][j] < -board_size) pos[i][j] = -board_size;
+            }
+        }
 
         // Update accelerations
         getAcc(pos, mass, acc, N);
 
-        // TODO: (1/2) kick
+        // (1/2) kick
+        for (int i = 0; i < N; i++) {
+            vel[i][0] += acc[i][0] * dt / 2.0;
+            vel[i][1] += acc[i][1] * dt / 2.0;
+            vel[i][2] += acc[i][2] * dt / 2.0;
+        }
 
         // Update time
         t += dt;
 
         // For debug: save positions to CSV at each step
-        // savePositionsToCSV(pos, N, step, filename);
+        savePositionsToCSV(pos, N, step, filename);
     }
 
     // Clean up dynamically allocated memory
