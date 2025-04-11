@@ -50,13 +50,16 @@ int main(int argc, char* argv[]) {
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
     cudaEventCreate(&stop);
-
+    
     cudaDeviceSynchronize();
     
     cudaEventRecord(start);
-    stencil(d_image, d_mask, d_output, n, R, threads_per_block);
-    cudaEventRecord(stop);
     
+    unsigned int num_blocks = (n + threads_per_block - 1) / threads_per_block;
+    size_t shared_mem_size = ((2 * R + 1) + (threads_per_block + 2 * R) + threads_per_block) * sizeof(float);
+    stencil_kernel<<<num_blocks, threads_per_block, shared_mem_size>>>(d_image, d_mask, d_output, n, R);
+    
+    cudaEventRecord(stop);
     cudaEventSynchronize(stop);
 
     float milliseconds = 0;
