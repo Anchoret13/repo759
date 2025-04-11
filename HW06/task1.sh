@@ -8,13 +8,10 @@
 #SBATCH --partition=research
 #SBATCH --gres=gpu:gtx1080:1
 
-# Clean up previous log files
 rm -f matmul_benchmark.out matmul_benchmark.err
 
-# Load CUDA module
 module load nvidia/cuda/11.8.0
 
-# Recreate logs directory
 rm -rf ./logs/task1
 mkdir -p ./logs/task1
 
@@ -39,5 +36,4 @@ do
     echo "$n,$THREADS_PER_BLOCK_2,$time_ms,$last_element" >> ./logs/task1/results.csv
 done
 
-# Don't try to plot - just save the data
 echo "Benchmark completed. Results saved in ./logs/task1/results.csv"
