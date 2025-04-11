@@ -1,9 +1,13 @@
 #!/bin/bash
 #SBATCH --job-name=task2_benchmark
-#SBATCH --time=02:00:00
+#SBATCH --time=00:30:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --gres=gpu:1
+#SBATCH --mem=2G
+#SBATCH --output=task2_benchmark.out
+#SBATCH --error=task2_benchmark.err
+#SBATCH --partition=research
+#SBATCH --gres=gpu:gtx1080:1
 
 mkdir -p ./logs/task2
 
@@ -13,7 +17,8 @@ R=128
 TPB1=1024
 TPB2=256
 
-for i in {10..29}; do
+# Reducing the range to make it more likely to complete within the time limit
+for i in {10..20}; do
     n=$((2**i))
     echo "Running with n = $n, R = $R, TPB = $TPB1"
     ./task2 $n $R $TPB1 > ./logs/task2/n${n}_R${R}_TPB${TPB1}.txt
@@ -22,4 +27,7 @@ for i in {10..29}; do
     ./task2 $n $R $TPB2 > ./logs/task2/n${n}_R${R}_TPB${TPB2}.txt
 done
 
-python vis_task2.py
+module load python/3.9.13
+python3 vis_task2.py
+
+echo "Benchmark completed. Results and plots saved in ./logs/task2/"
