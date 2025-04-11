@@ -1,4 +1,5 @@
 #include "matmul.cuh"
+#include <stdio.h>
 
 __global__ void matmul_kernel(const float* A, const float* B, float* C, size_t n) {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -21,4 +22,8 @@ void matmul(const float* A, const float* B, float* C, size_t n, unsigned int thr
     unsigned int num_blocks = (total_threads + threads_per_block - 1) / threads_per_block;
     
     matmul_kernel<<<num_blocks, threads_per_block>>>(A, B, C, n);
+    cudaError_t err = cudaGetLastError();
+    if (err != cudaSuccess) {
+        printf("CUDA Error: %s\n", cudaGetErrorString(err));
+    }
 }

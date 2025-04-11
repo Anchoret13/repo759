@@ -3,6 +3,15 @@
 #include <chrono>
 #include "matmul.cuh"
 
+#define CUDA_CHECK(call) \
+do { \
+    cudaError_t error = call; \
+    if (error != cudaSuccess) { \
+        std::cerr << "CUDA error: " << cudaGetErrorString(error) << std::endl; \
+        exit(EXIT_FAILURE); \
+    } \
+} while(0)
+
 int main(int argc, char* argv[]) {
     if (argc != 3) {
         std::cerr << "Usage: " << argv[0] << " n threads_per_block" << std::endl;
@@ -31,28 +40,29 @@ int main(int argc, char* argv[]) {
     }
 
     float *d_A, *d_B, *d_C;
-    cudaMalloc(&d_A, n * n * sizeof(float));
-    cudaMalloc(&d_B, n * n * sizeof(float));
-    cudaMalloc(&d_C, n * n * sizeof(float));
+    CUDA_CHECK(cudaMalloc(&d_A, n * n * sizeof(float)));
+    CUDA_CHECK(cudaMalloc(&d_B, n * n * sizeof(float)));
+    CUDA_CHECK(cudaMalloc(&d_C, n * n * sizeof(float)));
 
-    cudaMemcpy(d_A, h_A, n * n * sizeof(float), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_B, h_B, n * n * sizeof(float), cudaMemcpyHostToDevice);
+    CUDA_CHECK(cudaMemcpy(d_A, h_A, n * n * sizeof(float), cudaMemcpyHostToDevice));
+    CUDA_CHECK(cudaMemcpy(d_B, h_B, n * n * sizeof(float), cudaMemcpyHostToDevice));
 
     cudaEvent_t start, stop;
-    cudaEventCreate(&start);
-    cudaEventCreate(&stop);
+    CUDA_CHECK(cudaEventCreate(&start));
+    CUDA_CHECK(cudaEventCreate(&stop));
 
-    cudaEventRecord(start);
+    CUDA_CHECK(cudaDeviceSynchronize());
+    CUDA_CHECK(cudaEventRecord(start));
 
     matmul(d_A, d_B, d_C, n, threads_per_block);
 
-    cudaEventRecord(stop);
-    cudaEventSynchronize(stop);
+    CUDA_CHECK(cudaEventRecord(stop));
+    CUDA_CHECK(cudaEventSynchronize(stop));
 
     float milliseconds = 0;
-    cudaEventElapsedTime(&milliseconds, start, stop);
+    CUDA_CHECK(cudaEventElapsedTime(&milliseconds, start, stop));
 
-    cudaMemcpy(h_C, d_C, n * n * sizeof(float), cudaMemcpyDeviceToHost);
+    CUDA_CHECK(cudaMemcpy(h_C, d_C, n * n * sizeof(float), cudaMemcpyDeviceToHost));
 
     std::cout << h_C[n * n - 1] << std::endl;
     std::cout << milliseconds << std::endl;
@@ -60,11 +70,11 @@ int main(int argc, char* argv[]) {
     delete[] h_A;
     delete[] h_B;
     delete[] h_C;
-    cudaFree(d_A);
-    cudaFree(d_B);
-    cudaFree(d_C);
-    cudaEventDestroy(start);
-    cudaEventDestroy(stop);
+    CUDA_CHECK(cudaFree(d_A));
+    CUDA_CHECK(cudaFree(d_B));
+    CUDA_CHECK(cudaFree(d_C));
+    CUDA_CHECK(cudaEventDestroy(start));
+    CUDA_CHECK(cudaEventDestroy(stop));
 
     return 0;
 }
