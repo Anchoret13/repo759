@@ -1,13 +1,11 @@
 #!/bin/bash
-#SBATCH --job-name=task2_benchmark
-#SBATCH --time=00:30:00
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --mem=2G
-#SBATCH --output=task2_benchmark.out
-#SBATCH --error=task2_benchmark.err
-#SBATCH --partition=research
-#SBATCH --gres=gpu:gtx1080:1
+#SBATCH --job-name=task2
+#SBATCH --partition=interactive
+#SBATCH --ntasks=1
+#SBATCH --gres=gpu:1
+#SBATCH --time=00:05:00
+#SBATCH --output=task2_output.txt
+#SBATCH --error=task2_error.txt
 
 rm -f task2_benchmark.out task2_benchmark.err
 
