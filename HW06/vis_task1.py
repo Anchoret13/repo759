@@ -25,8 +25,8 @@ plt.plot(n_values, reference_times, 'k--', label='O(n³) reference')
 
 plt.legend()
 plt.tight_layout()
-plt.savefig('./logs/task1/task1.pdf')
-print("Plot saved to ./logs/task1/task1.pdf")
+plt.savefig('./task1.pdf')
+print("Plot saved to ./task1.pdf")
 
 plt.figure(figsize=(12, 8))
 
@@ -49,5 +49,5 @@ plt.title('Performance Improvement by Thread Count')
 plt.axhline(y=1, color='r', linestyle='-')
 plt.legend()
 plt.tight_layout()
-plt.savefig('./logs/task1/task1_speedup.pdf')
-print("Speedup plot saved to ./logs/task1/task1_speedup.pdf")
+plt.savefig('./task1_speedup.pdf')
+print("Speedup plot saved to ./task1_speedup.pdf")

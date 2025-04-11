@@ -20,7 +20,7 @@ nvcc task2.cu stencil.cu -Xcompiler -O3 -Xcompiler -Wall -Xptxas -O3 -std=c++17 
 
 R=128
 TPB1=1024
-TPB2=256
+TPB2=512
 
 for i in {10..29}; do
     n=$((2**i))
