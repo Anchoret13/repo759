@@ -22,17 +22,30 @@ THREADS_PER_BLOCK_2=256
 
 echo "n,threads_per_block,time_ms,last_element" > ./logs/task1/results.csv
 
-for i in {5..14}
+# Start with small matrix sizes for testing
+for i in {2..14}
 do
     n=$((2**i))
-    output=$(./task1 $n $THREADS_PER_BLOCK_1)
-    last_element=$(echo "$output" | head -n 1)
-    time_ms=$(echo "$output" | tail -n 1)
+    echo "Running matrix size n=$n with $THREADS_PER_BLOCK_1 threads per block"
+    output=$(./task1 $n $THREADS_PER_BLOCK_1 2>&1)
+    echo "Raw output: $output"
+    
+    # Extract the last two lines only for the CSV
+    last_element=$(echo "$output" | grep -v "Starting with" | grep -v "First few values" | grep -v "Result calculation" | head -n 1)
+    time_ms=$(echo "$output" | grep -v "Starting with" | grep -v "First few values" | grep -v "Result calculation" | tail -n 1)
+    
+    echo "Extracted: last_element=$last_element, time_ms=$time_ms"
     echo "$n,$THREADS_PER_BLOCK_1,$time_ms,$last_element" >> ./logs/task1/results.csv
     
-    output=$(./task1 $n $THREADS_PER_BLOCK_2)
-    last_element=$(echo "$output" | head -n 1)
-    time_ms=$(echo "$output" | tail -n 1)
+    echo "Running matrix size n=$n with $THREADS_PER_BLOCK_2 threads per block"
+    output=$(./task1 $n $THREADS_PER_BLOCK_2 2>&1)
+    echo "Raw output: $output"
+    
+    # Extract the last two lines only for the CSV
+    last_element=$(echo "$output" | grep -v "Starting with" | grep -v "First few values" | grep -v "Result calculation" | head -n 1)
+    time_ms=$(echo "$output" | grep -v "Starting with" | grep -v "First few values" | grep -v "Result calculation" | tail -n 1)
+    
+    echo "Extracted: last_element=$last_element, time_ms=$time_ms"
     echo "$n,$THREADS_PER_BLOCK_2,$time_ms,$last_element" >> ./logs/task1/results.csv
 done
 
