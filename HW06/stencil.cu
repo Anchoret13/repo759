@@ -14,8 +14,6 @@ __global__ void stencil_kernel(const float* image, const float* mask, float* out
         shared_mask[local_idx] = mask[local_idx];
     }
     
-    int image_idx = global_idx - R;
-    
     if (local_idx < blockDim.x + 2 * R) {
         int source_idx = blockIdx.x * blockDim.x + local_idx - R;
         if (source_idx < 0 || source_idx >= n) {
@@ -29,8 +27,8 @@ __global__ void stencil_kernel(const float* image, const float* mask, float* out
     
     if (global_idx < n) {
         float sum = 0.0f;
-        for (int j = -R; j <= R; j++) {
-            sum += shared_image[local_idx + R + j] * shared_mask[j + R];
+        for (int j = 0; j < 2 * R + 1; j++) {
+            sum += shared_image[local_idx + j] * shared_mask[j];
         }
         shared_output[local_idx] = sum;
     }
@@ -48,4 +46,5 @@ __host__ void stencil(const float* image, const float* mask, float* output, unsi
     size_t shared_mem_size = ((2 * R + 1) + (threads_per_block + 2 * R) + threads_per_block) * sizeof(float);
     
     stencil_kernel<<<num_blocks, threads_per_block, shared_mem_size>>>(image, mask, output, n, R);
+    cudaDeviceSynchronize();
 }

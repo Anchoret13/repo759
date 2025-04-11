@@ -51,11 +51,12 @@ int main(int argc, char* argv[]) {
     cudaEventCreate(&start);
     cudaEventCreate(&stop);
 
+    cudaDeviceSynchronize();
+    
     cudaEventRecord(start);
-    
     stencil(d_image, d_mask, d_output, n, R, threads_per_block);
-    
     cudaEventRecord(stop);
+    
     cudaEventSynchronize(stop);
 
     float milliseconds = 0;
