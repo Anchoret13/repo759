@@ -1,9 +1,13 @@
 #!/bin/bash
 #SBATCH --job-name=task2_benchmark
-#SBATCH --time=02:00:00
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
+#SBATCH --ntasks=1
+#SBATCH --time=00:30:00
+#SBATCH --mem=2G
+#SBATCH --output=task2_benchmark.out
+#SBATCH --error=task2_benchmark.err
+#SBATCH --partition=gpu
 #SBATCH --gres=gpu:1
+#SBATCH --constraint=cuda
 
 mkdir -p ./logs/task2
 
