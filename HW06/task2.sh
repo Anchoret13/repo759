@@ -22,7 +22,7 @@ R=128
 TPB1=1024
 TPB2=256
 
-for i in {10..20}; do
+for i in {10..29}; do
     n=$((2**i))
     echo "Running with n = $n, R = $R, TPB = $TPB1"
     ./task2 $n $R $TPB1 > ./logs/task2/n${n}_R${R}_TPB${TPB1}.txt
