@@ -19,7 +19,7 @@ __global__ void stencil_kernel(const float* image, const float* mask, float* out
     if (local_idx < blockDim.x + 2 * R) {
         int source_idx = blockIdx.x * blockDim.x + local_idx - R;
         if (source_idx < 0 || source_idx >= n) {
-            shared_image[local_idx] = 1.0f;
+            shared_image[local_idx] = 0.0f;
         } else {
             shared_image[local_idx] = image[source_idx];
         }

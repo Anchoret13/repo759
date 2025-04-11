@@ -4,20 +4,24 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def get_time_from_file(filename):
-    with open(filename, 'r') as f:
-        lines = f.readlines()
-        if len(lines) >= 2:
-            try:
-                return float(lines[1].strip())
-            except:
-                return None
+    try:
+        with open(filename, 'r') as f:
+            lines = f.readlines()
+            if len(lines) >= 2:
+                try:
+                    return float(lines[1].strip())
+                except:
+                    return None
+    except FileNotFoundError:
+        print(f"File not found: {filename}")
+        return None
     return None
 
 def main():
     # Parameters
     R = 128
     TPB1 = 1024
-    TPB2 = 256
+    TPB2 = 512
     
     # Initialize data structures
     n_values = [2**i for i in range(10, 30)]
@@ -46,10 +50,10 @@ def main():
     plt.figure(figsize=(10, 6))
     
     # Plot both lines
-    if len(times_tpb1) == len(n_values):
-        plt.plot(n_values, times_tpb1, 'b-o', label=f'Threads per block = {TPB1}')
-    if len(times_tpb2) == len(n_values):
-        plt.plot(n_values, times_tpb2, 'r-s', label=f'Threads per block = {TPB2}')
+    if len(times_tpb1) > 0:
+        plt.plot(n_values[:len(times_tpb1)], times_tpb1, 'b-o', label=f'Threads per block = {TPB1}')
+    if len(times_tpb2) > 0:
+        plt.plot(n_values[:len(times_tpb2)], times_tpb2, 'r-s', label=f'Threads per block = {TPB2}')
     
     # Set logarithmic scale for x-axis
     plt.xscale('log', base=2)
