@@ -1,12 +1,11 @@
 #!/bin/bash
 #SBATCH --job-name=matmul_benchmark
 #SBATCH --ntasks=1
-#SBATCH --time=00:30:00
+#SBATCH --time=00:05:00
 #SBATCH --mem=2G
 #SBATCH --output=matmul_benchmark.out
 #SBATCH --error=matmul_benchmark.err
-#SBATCH --partition=research
-#SBATCH --gres=gpu:gtx1080:1
+#SBATCH --gres=gpu:1
 
 rm -f matmul_benchmark.out matmul_benchmark.err
 
