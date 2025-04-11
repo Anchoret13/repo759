@@ -8,9 +8,14 @@
 #SBATCH --partition=research
 #SBATCH --gres=gpu:gtx1080:1
 
+# Clean up previous log files
+rm -f matmul_benchmark.out matmul_benchmark.err
+
 # Load CUDA module
 module load nvidia/cuda/11.8.0
 
+# Recreate logs directory
+rm -rf ./logs/task1
 mkdir -p ./logs/task1
 
 nvcc task1.cu matmul.cu -Xcompiler -O3 -Xcompiler -Wall -Xptxas -O3 -std=c++17 -o task1
