@@ -8,6 +8,9 @@
 #SBATCH --partition=research
 #SBATCH --gres=gpu:gtx1080:1
 
+# Load CUDA module
+module load nvidia/cuda/11.8.0
+
 mkdir -p ./logs/task1
 
 nvcc task1.cu matmul.cu -Xcompiler -O3 -Xcompiler -Wall -Xptxas -O3 -std=c++17 -o task1
@@ -31,7 +34,5 @@ do
     echo "$n,$THREADS_PER_BLOCK_2,$time_ms,$last_element" >> ./logs/task1/results.csv
 done
 
-module load python/3.9.13
-python3 vis_task1.py
-
-echo "Benchmark completed. Results and plots saved in ./logs/task1/"
+# Don't try to plot - just save the data
+echo "Benchmark completed. Results saved in ./logs/task1/results.csv"

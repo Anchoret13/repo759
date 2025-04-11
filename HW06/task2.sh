@@ -9,6 +9,9 @@
 #SBATCH --partition=research
 #SBATCH --gres=gpu:gtx1080:1
 
+# Load CUDA module
+module load nvidia/cuda/11.8.0
+
 mkdir -p ./logs/task2
 
 nvcc task2.cu stencil.cu -Xcompiler -O3 -Xcompiler -Wall -Xptxas -O3 -std=c++17 -o task2
@@ -27,7 +30,5 @@ for i in {10..20}; do
     ./task2 $n $R $TPB2 > ./logs/task2/n${n}_R${R}_TPB${TPB2}.txt
 done
 
-module load python/3.9.13
-python3 vis_task2.py
-
-echo "Benchmark completed. Results and plots saved in ./logs/task2/"
+# Don't try to plot - just save the data
+echo "Benchmark completed. Raw results saved in ./logs/task2/"
