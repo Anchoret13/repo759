@@ -12,6 +12,10 @@ module load nvidia/cuda
 rm -rf ./logs/task2
 mkdir -p ./logs/task2
 
+rm ./task2_output.txt
+rm ./task2_error.txt
+rm ./task1
+
 # Use -allow-unsupported-compiler flag to override GCC version check
 nvcc task2.cu reduce.cu -allow-unsupported-compiler -Xcompiler -O3 -Xcompiler -Wall -Xptxas -O3 -std=c++17 -o task2
 
