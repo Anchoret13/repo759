@@ -49,40 +49,59 @@ try:
 except Exception as e:
     print(f"Error saving plot: {e}")
 
-# Find best performing block_dim for n=2^14
+# Find best performing block_dim for n=2^14 if available
 n_max = 2**14
-max_data = results[results['n'] == n_max]
-best_results = max_data.loc[max_data.groupby('type')['time_ms'].idxmin()]
-print("\nBest performing block_dim for n=2^14:")
-print(best_results[['type', 'block_dim', 'time_ms']])
+if n_max in results['n'].values:
+    max_data = results[results['n'] == n_max]
+    if not max_data.empty:
+        best_results = max_data.loc[max_data.groupby('type')['time_ms'].idxmin()]
+        print("\nBest performing block_dim for n=2^14:")
+        print(best_results[['type', 'block_dim', 'time_ms']])
+    else:
+        print(f"\nNo data available for n={n_max}")
+else:
+    print(f"\nNo data available for n={n_max}, largest n is {results['n'].max()}")
+    # Print best results for largest available n instead
+    largest_n = results['n'].max()
+    if largest_n > 0:
+        print(f"Best performing block_dim for the largest available n={largest_n}:")
+        largest_data = results[results['n'] == largest_n]
+        best_largest = largest_data.loc[largest_data.groupby('type')['time_ms'].idxmin()]
+        print(best_largest[['type', 'block_dim', 'time_ms']])
 
-# Compare performance across data types
+# Compare performance across data types with available data
 plt.figure(figsize=(12, 8))
 
-# For the best block_dim for each data type
-best_block_dims = {}
+data_by_type = {}
 for dtype in ['int', 'float', 'double']:
     type_data = results[results['type'] == dtype]
-    best_block_dim = max_data[max_data['type'] == dtype].loc[max_data[max_data['type'] == dtype]['time_ms'].idxmin()]['block_dim']
-    best_block_dims[dtype] = best_block_dim
-    
-    # Filter data for this type and its best block_dim
-    filtered_data = type_data[type_data['block_dim'] == best_block_dim]
-    plt.plot(filtered_data['n'], filtered_data['time_ms'], 
-            marker='o', linestyle='-', linewidth=2,
-            label=f'{dtype}, best block_dim={best_block_dim}')
+    if not type_data.empty:
+        # Find best block_dim for each type based on average performance
+        avg_perf = type_data.groupby('block_dim')['time_ms'].mean()
+        if not avg_perf.empty:
+            best_block_dim = avg_perf.idxmin()
+            # Filter data for this type and its best block_dim
+            filtered_data = type_data[type_data['block_dim'] == best_block_dim]
+            if not filtered_data.empty:
+                plt.plot(filtered_data['n'], filtered_data['time_ms'], 
+                        marker='o', linestyle='-', linewidth=2,
+                        label=f'{dtype}, best block_dim={best_block_dim}')
+                data_by_type[dtype] = filtered_data
 
-plt.xscale('log', base=2)
-plt.yscale('log')
-plt.grid(True, which="both", ls="--", alpha=0.7)
-plt.xlabel('Matrix Size (n)', fontsize=14)
-plt.ylabel('Execution Time (ms)', fontsize=14)
-plt.title('Matrix Multiplication Performance by Data Type (Best Block Dim)', fontsize=16)
-plt.legend(fontsize=12)
-plt.tight_layout()
+if data_by_type:
+    plt.xscale('log', base=2)
+    plt.yscale('log')
+    plt.grid(True, which="both", ls="--", alpha=0.7)
+    plt.xlabel('Matrix Size (n)', fontsize=14)
+    plt.ylabel('Execution Time (ms)', fontsize=14)
+    plt.title('Matrix Multiplication Performance by Data Type (Best Block Dim)', fontsize=16)
+    plt.legend(fontsize=12)
+    plt.tight_layout()
 
-try:
-    plt.savefig('./task1_by_type.pdf')
-    print("Type comparison plot saved to ./task1_by_type.pdf")
-except Exception as e:
-    print(f"Error saving type comparison plot: {e}")
+    try:
+        plt.savefig('./task1_by_type.pdf')
+        print("Type comparison plot saved to ./task1_by_type.pdf")
+    except Exception as e:
+        print(f"Error saving type comparison plot: {e}")
+else:
+    print("Not enough data to create type comparison plot")
