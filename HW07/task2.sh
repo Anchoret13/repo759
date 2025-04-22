@@ -12,7 +12,8 @@ module load nvidia/cuda
 rm -rf ./logs/task2
 mkdir -p ./logs/task2
 
-nvcc task2.cu reduce.cu -Xcompiler -O3 -Xcompiler -Wall -Xptxas -O3 -std=c++17 -o task2
+# Use -allow-unsupported-compiler flag to override GCC version check
+nvcc task2.cu reduce.cu -allow-unsupported-compiler -Xcompiler -O3 -Xcompiler -Wall -Xptxas -O3 -std=c++17 -o task2
 
 # Define the threads per block values to test
 TPB1=1024
