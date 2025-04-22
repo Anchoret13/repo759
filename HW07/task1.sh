@@ -7,17 +7,15 @@
 #SBATCH --output=task1_output.txt
 #SBATCH --error=task1_error.txt
 
-module load nvidia/cuda
+# Load specific CUDA version
+module load nvidia/cuda/11.8.0
 
 rm -rf ./logs/task1
 mkdir -p ./logs/task1
 
-rm ./task1_output.txt
-rm ./task1_error.txt
-rm ./task1
 
 # Use -allow-unsupported-compiler flag to override GCC version check
-nvcc task1.cu matmul.cu -allow-unsupported-compiler -Xcompiler -O3 -Xcompiler -Wall -Xptxas -O3 -std=c++17 -o task1
+nvcc -allow-unsupported-compiler task1.cu matmul.cu -Xcompiler -O3 -Xcompiler -Wall -Xptxas -O3 -std=c++17 -o task1
 
 echo "n,block_dim,type,time_ms,first_element,last_element" > ./logs/task1/results.csv
 
